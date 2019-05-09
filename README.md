@@ -45,7 +45,7 @@ Allow debug page
 app = Webview::App.new(debug: true)
 ```
 
-Run with your backend
+Run with your backend.
 
 ```ruby
 app = Webview::App.new
@@ -86,7 +86,7 @@ window.external.invoke('invalid_type' + ',' + 'my_data');
 * savefile: Open a dialog, and call rpc_cb('savefile', path, user_data) 
 
 
-## Desktop application
+## GUI Application
 
 If we build ruby binary for different systems, then we can public our App for normal user
 
@@ -94,6 +94,9 @@ Some ways:
 
 * [Traveling Ruby](https://github.com/phusion/traveling-ruby). I have made a version to support ruby 2.6.3 [here](https://github.com/xiejiangzhi/traveling-ruby) for OSX and Linux
 * [Ruby Packer](https://github.com/pmq20/ruby-packer)
+
+
+When I finish my application, I will make a gem of the framework.
 
 ## Development
 
