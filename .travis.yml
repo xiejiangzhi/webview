@@ -4,4 +4,16 @@ language: ruby
 cache: bundler
 rvm:
   - 2.6.3
-before_install: gem install bundler -v 2.0.1
+before_install:
+  - gem install bundler -v 2.0.1
+
+  - sudo add-apt-repository ppa:webkit-team/ppa -y
+  - sudo apt-get update
+  - sudo apt-get install libwebkit2gtk-4.0-dev -y
+
+  - cd ext
+  - ruby extconf.rb
+  - make && make install
+
+script:
+  - bundle exec rspec
