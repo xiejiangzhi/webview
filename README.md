@@ -1,8 +1,6 @@
 # Webview
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/webview`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+a webview GUI based on [zserge/webview](https://github.com/zserge/webview)
 
 ## Installation
 
@@ -22,7 +20,63 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+app = Webview::App.new
+app.open('http://localhost:3000?foo=bar')
+
+at_exit { app.close }
+begin
+  app.join
+rescue Interrupt
+  app.close
+end
+```
+
+Allow debug page
+
+```ruby
+app = Webview::App.new(debug: true)
+```
+
+Run with your backend
+
+```ruby
+app = Webview::App.new
+backend = Thread.new { `rails s` }
+app.open('http://localhost:3000')
+
+at_exit { app.close }
+begin
+  app.join
+rescue Interrupt
+  app.close
+  backend.kill
+end
+```
+
+RPC with Javascript
+
+```javascript
+window.rpc_cb = function(type, value, user_data) {
+  consloe.log(type, value, user_data)
+}
+
+var type = 'openfile'
+window.external.invoke(type + ',' + 'my_data_id');
+// Open a dialog. and call rpc_cb('openfile', 'selected_file_path', "my_data_id") after user choice file.
+
+window.external.invoke('invalid_type' + ',' + 'my_data');
+// if got a error, will call rpc_cb('error', 'invalid_type', 'my_data')
+```
+
+## Javascript RPCs
+
+* close: close this app window, no callback
+* fullscreen: no callback
+* unfullscreen: no callback
+* openfile: Open a dialog, and call rpc_cb('openfile', path, user_data) 
+* opendir: Open a dialog, and call rpc_cb('opendir', path, user_data) 
+* savefile: Open a dialog, and call rpc_cb('savefile', path, user_data) 
 
 ## Development
 
