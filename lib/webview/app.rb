@@ -14,6 +14,9 @@ module Webview
         debug: debug
       }
       @options.delete_if { |k, v| v.nil? }
+      @app_out = nil
+      @app_err = nil
+      @app_process = nil
     end
 
     def open(url)

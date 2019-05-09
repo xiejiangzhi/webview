@@ -9,8 +9,8 @@ import "os"
 import "strings"
 
 func EvalCallback(w webview.WebView, name string, value string, userdata string) {
-  value = strings.ReplaceAll(value, "'", "\\'")
-  userdata = strings.ReplaceAll(userdata, "'", "\\'")
+  value = strings.Replace(value, "'", "\\'", -1)
+  userdata = strings.Replace(userdata, "'", "\\'", -1)
 
 	w.Eval(fmt.Sprintf(`
     (function(){
@@ -26,7 +26,10 @@ func EvalCallback(w webview.WebView, name string, value string, userdata string)
 
 func handleRPC(w webview.WebView, data string) {
   s := strings.SplitN(data, ",", 2)
-  action, userdata := s[0], s[1]
+  action, userdata := s[0], ""
+  if len(s) > 1 {
+    userdata = s[1]
+  }
 
 	switch {
 	case action == "close":

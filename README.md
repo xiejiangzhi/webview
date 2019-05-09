@@ -5,6 +5,10 @@
 
 A webview GUI based on [zserge/webview](https://github.com/zserge/webview)
 
+## Require
+
+* `golang`
+
 ## Installation
 
 Add this line to your application's Gemfile:
