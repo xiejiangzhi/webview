@@ -85,6 +85,16 @@ window.external.invoke('invalid_type' + ',' + 'my_data');
 * opendir: Open a dialog, and call rpc_cb('opendir', path, user_data) 
 * savefile: Open a dialog, and call rpc_cb('savefile', path, user_data) 
 
+
+## Desktop application
+
+If we build ruby binary for different systems, then we can public our App for normal user
+
+Some ways:
+
+* [Traveling Ruby](https://github.com/phusion/traveling-ruby). I have made a version to support ruby 2.6.3 [here](https://github.com/xiejiangzhi/traveling-ruby) for OSX and Linux
+* [Ruby Packer](https://github.com/pmq20/ruby-packer)
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
