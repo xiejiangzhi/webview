@@ -12,3 +12,7 @@
 
 /ext/ext_package
 /ext/webview_app
+mkmf.log
+/webview-*.gem
+
+*.swp

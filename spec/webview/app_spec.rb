@@ -4,7 +4,7 @@ RSpec.describe Webview::App do
   describe '#open/close' do
     it 'should open app window by webview' do
       expect(subject).to receive(:exec_cmd).with(
-        File.join(root_path, 'ext/webview_app') + " -url http://localhost:1234/asdf"
+        File.join(root_path, 'ext/webview_app') + " -url 'http://localhost:1234/asdf'"
       ).and_call_original
       expect(subject.open('http://localhost:1234/asdf')).to eql(true)
       sleep 0.5
@@ -16,10 +16,13 @@ RSpec.describe Webview::App do
       expect(subject.app_process).to eql(nil)
     end
 
-    it 'should open app window with debug if debug is open' do
-      subject = described_class.new debug: true
+    it 'should open app window with options' do
+      subject = described_class.new(
+        width: 100, height: 100, title: 'x"xx', resizable: true, debug: true
+      )
       expect(subject).to receive(:exec_cmd).with(
-        File.join(root_path, 'ext/webview_app') + " -url http://localhost:4321/aaa -debug"
+        File.join(root_path, 'ext/webview_app') + " -url 'http://localhost:4321/aaa'" +
+        " -title 'x\"xx' -width '100' -height '100' -resizable -debug"
       ).and_call_original
       expect(subject.open('http://localhost:4321/aaa')).to eql(true)
       sleep 0.5
