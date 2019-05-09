@@ -1,6 +1,9 @@
 # Webview
 
-a webview GUI based on [zserge/webview](https://github.com/zserge/webview)
+[![Build Status](https://travis-ci.org/xiejiangzhi/webview.svg?branch=master)](https://travis-ci.org/xiejiangzhi/webview)
+[![Gem Version](https://badge.fury.io/rb/webview.svg)](https://badge.fury.io/rb/webview)
+
+A webview GUI based on [zserge/webview](https://github.com/zserge/webview)
 
 ## Installation
 
