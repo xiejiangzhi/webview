@@ -1,7 +1,9 @@
 ---
 sudo: false
 language: ruby
-cache: bundler
+cache:
+  - bundler
+  - apt
 rvm:
   - 2.6.3
 before_install:

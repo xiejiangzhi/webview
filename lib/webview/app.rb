@@ -40,12 +40,11 @@ module Webview
       app_err.close
 
       pid = app_process.pid
-      Process.kill('QUIT', pid)
+      signal('QUIT')
       begin
         Timeout.timeout(3) { Process.wait(pid) }
       rescue Timeout::Error
         kill
-      rescue Errno::ECHILD
       end
 
       @app_process = nil
@@ -58,8 +57,15 @@ module Webview
     end
 
     def kill
-      return unless app_process&.pid
-      Process.kill('TERM', app_process.pid)
+      signal('TERM')
+    end
+
+    def signal(name)
+      return false unless app_process&.pid
+      Process.kill(name, app_process.pid)
+      true
+    rescue Errno::ECHILD, Errno::ESRCH
+      false
     end
 
     private
@@ -74,5 +80,4 @@ module Webview
       end
     end
   end
-
 end

@@ -47,4 +47,14 @@ RSpec.describe Webview::App do
     expect(Process).to receive(:kill).with('TERM', subject.app_process.pid).and_call_original
     subject.kill
   end
+
+  it '#signal should not raise error if process not found' do
+    subject.open('http://xxx.com')
+    expect(Process).to receive(:kill).with('QUIT', subject.app_process.pid).and_call_original.twice
+    expect(Process).to receive(:kill).with('TERM', subject.app_process.pid).and_call_original.twice
+    subject.signal("QUIT")
+    subject.signal("QUIT")
+    subject.signal("TERM")
+    subject.signal("TERM")
+  end
 end
