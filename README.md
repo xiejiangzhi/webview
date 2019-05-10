@@ -42,7 +42,13 @@ end
 Allow debug page
 
 ```ruby
-app = Webview::App.new(debug: true)
+Webview::App.new(debug: true).open('http://example.com')
+```
+
+All options
+
+```ruby
+Webview::App.new(title: 'ttt', width: 600, height: 400, resizable: true, debug: true)
 ```
 
 Run with your backend.
