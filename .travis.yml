@@ -13,10 +13,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libwebkit2gtk-4.0-dev -y
 
-  - cd ext
-  - ruby extconf.rb
-  - make && make install
-  - cd ..
+  - bin/build_ext
 
 script:
   - bundle exec rspec

@@ -3,20 +3,18 @@ RSpec.describe Webview::App do
 
   describe '#open/close' do
     it 'should open app window by webview' do
-      expect(subject).to receive(:exec_cmd).with(
-        File.join(root_path, 'ext/webview_app') + " -url 'http://localhost:1234/asdf'"
-      ).and_call_original
+      r = Open3.popen3('sleep 1')
+      expect(Open3).to receive(:popen3).with(
+        subject.send(:executable) + " -url 'http://localhost:1234/asdf'"
+      ).and_return(r)
       expect(subject.open('http://localhost:1234/asdf')).to eql(true)
       sleep 0.5
       ap = subject.app_process
 
-      close_proc = proc { subject.close }
-      if $gui_env
-        expect(ap.alive?).to eql(true)
-        expect(close_proc).to change { ap.alive? }.to(false)
-      else
-        close_proc.call
-      end
+      expect(ap.alive?).to eql(true)
+      expect {
+        subject.close
+      }.to change { ap.alive? }.to(false)
       expect(subject.app_process).to eql(nil)
     end
 
@@ -24,21 +22,19 @@ RSpec.describe Webview::App do
       subject = described_class.new(
         width: 100, height: 100, title: 'x"xx', resizable: true, debug: true
       )
-      expect(subject).to receive(:exec_cmd).with(
-        File.join(root_path, 'ext/webview_app') + " -url 'http://localhost:4321/aaa'" +
+      r = Open3.popen3('sleep 1')
+      expect(Open3).to receive(:popen3).with(
+        subject.send(:executable) + " -url 'http://localhost:4321/aaa'" +
         " -title 'x\"xx' -width '100' -height '100' -resizable -debug"
-      ).and_call_original
+      ).and_return(r)
       expect(subject.open('http://localhost:4321/aaa')).to eql(true)
       sleep 0.5
       ap = subject.app_process
 
-      close_proc = proc { subject.close }
-      if $gui_env
-        expect(ap.alive?).to eql(true)
-        expect(close_proc).to change { ap.alive? }.to(false)
-      else
-        close_proc.call
-      end
+      expect(ap.alive?).to eql(true)
+      expect {
+        subject.close
+      }.to change { ap.alive? }.to(false)
       expect(subject.app_process).to eql(nil)
     end
 
@@ -77,5 +73,17 @@ RSpec.describe Webview::App do
     subject.signal("QUIT")
     subject.signal("TERM")
     subject.signal("TERM")
+  end
+
+  it '#executable should return path of webview binary' do
+    expect(subject).to receive(:executable).and_call_original
+    expect(subject.send(:executable)).to eql(File.join(Webview::ROOT_PATH, 'ext/webview_app'))
+  end
+
+  it 'executable should able to run' do
+    _out, help, _ = Open3.capture3("#{subject.send(:executable)} -h")
+    keys = help.lines.select { |l| l =~ /\s*-\w+\s/ }.map(&:strip).map { |s| s.split.first }
+    expect(help).to match(/^Usage of /)
+    expect(keys.sort).to eql(%w{-debug -headless -height -resizable -title -url -width})
   end
 end

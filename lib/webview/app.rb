@@ -21,10 +21,7 @@ module Webview
 
     def open(url)
       return true if @app_process
-      cmd = [
-        File.expand_path('ext/webview_app', ROOT_PATH),
-        "-url '#{url}'"
-      ]
+      cmd = [executable, "-url '#{url}'"]
       @options.each do |k, v|
         case v
         when true, false then cmd << "-#{k}" if v
@@ -72,6 +69,10 @@ module Webview
     end
 
     private
+
+    def executable
+      File.expand_path('ext/webview_app', ROOT_PATH)
+    end
 
     def exec_cmd(cmd)
       app_in, @app_out, @app_err, @app_process = Open3.popen3(cmd)
