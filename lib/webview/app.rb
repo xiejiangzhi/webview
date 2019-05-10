@@ -42,7 +42,10 @@ module Webview
       pid = app_process.pid
       signal('QUIT')
       begin
-        Timeout.timeout(3) { Process.wait(pid) }
+        Timeout.timeout(3) do
+          Process.wait(pid)
+        rescue Errno::ECHILD, Errno::ESRCH
+        end
       rescue Timeout::Error
         kill
       end
@@ -53,7 +56,7 @@ module Webview
     def join
       return unless app_process && app_process.alive?
       Process.wait(app_process.pid)
-    rescue Errno::ECHILD
+    rescue Errno::ECHILD, Errno::ESRCH
     end
 
     def kill

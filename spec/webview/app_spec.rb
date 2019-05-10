@@ -33,6 +33,12 @@ RSpec.describe Webview::App do
       }.to change { ap.alive? }.to(false)
       expect(subject.app_process).to eql(nil)
     end
+
+    it 'should not raise error if not found process' do
+      subject.open('http://xxx.com')
+      subject.signal('TERM')
+      subject.close
+    end
   end
 
   it '#join should wait process' do
@@ -44,6 +50,13 @@ RSpec.describe Webview::App do
 
   it '#kill should kill with TERM' do
     subject.open('http://xxx.com')
+    expect(Process).to receive(:kill).with('TERM', subject.app_process.pid).and_call_original
+    subject.kill
+  end
+
+  it '#kill should raise error if process was killed' do
+    subject.open('http://xxx.com')
+    subject.signal('TERM')
     expect(Process).to receive(:kill).with('TERM', subject.app_process.pid).and_call_original
     subject.kill
   end
