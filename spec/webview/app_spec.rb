@@ -9,10 +9,14 @@ RSpec.describe Webview::App do
       expect(subject.open('http://localhost:1234/asdf')).to eql(true)
       sleep 0.5
       ap = subject.app_process
-      expect(ap.alive?).to eql(true) if $gui_env
-      expect {
-        subject.close
-      }.to change { ap.alive? }.to(false)
+
+      close_proc = proc { subject.close }
+      if $gui_env
+        expect(ap.alive?).to eql(true)
+        expect(close_proc).to change { ap.alive? }.to(false)
+      else
+        close_proc.call
+      end
       expect(subject.app_process).to eql(nil)
     end
 
@@ -27,10 +31,14 @@ RSpec.describe Webview::App do
       expect(subject.open('http://localhost:4321/aaa')).to eql(true)
       sleep 0.5
       ap = subject.app_process
-      expect(ap.alive?).to eql(true) if $gui_env
-      expect {
-        subject.close
-      }.to change { ap.alive? }.to(false)
+
+      close_proc = proc { subject.close }
+      if $gui_env
+        expect(ap.alive?).to eql(true)
+        expect(close_proc).to change { ap.alive? }.to(false)
+      else
+        close_proc.call
+      end
       expect(subject.app_process).to eql(nil)
     end
 
