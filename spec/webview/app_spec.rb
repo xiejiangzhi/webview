@@ -84,6 +84,6 @@ RSpec.describe Webview::App do
     _out, help, _ = Open3.capture3("#{subject.send(:executable)} -h")
     keys = help.lines.select { |l| l =~ /\s*-\w+\s/ }.map(&:strip).map { |s| s.split.first }
     expect(help).to match(/^Usage of /)
-    expect(keys.sort).to eql(%w{-debug -headless -height -resizable -title -url -width})
+    expect(keys.sort).to eql(%w{-debug -height -resizable -title -url -width})
   end
 end

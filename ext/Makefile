@@ -10,5 +10,5 @@ install:
 	mv webview/webview ./webview_app
 
 clean:
-	rm webview_app
-	rm ext_package
+	rm -f webview_app
+	rm -f ext_package
