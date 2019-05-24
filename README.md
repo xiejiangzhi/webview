@@ -5,9 +5,12 @@
 
 A webview GUI based on [zserge/webview](https://github.com/zserge/webview)
 
-## Require
+
+## Requirements
 
 * `golang`
+* `Cocoa`/`WebKit` on macOS, `gtk-webkit2` on Linux and `MSHTML` (IE10/11) on Windows.
+
 
 ## Installation
 
