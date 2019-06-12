@@ -1,6 +1,7 @@
 RSpec.describe Webview::App do
   let(:root_path) { Webview::ROOT_PATH }
   let(:s_kill) { Signal.list['KILL'] }
+  let(:s_quit) { Signal.list[Webview::App::SIGNALS_MAPPING['QUIT'] || 'QUIT'] }
 
   describe '#open/close' do
     it 'should open app window by webview' do
@@ -70,7 +71,7 @@ RSpec.describe Webview::App do
   it '#signal should not raise error if process not found' do
     subject.open('http://xxx.com')
     expect(Process).to receive(:kill) \
-      .with(Signal.list['EXIT'], subject.app_process.pid).and_call_original.twice
+      .with(s_quit, subject.app_process.pid).and_call_original.twice
     expect(Process).to receive(:kill) \
       .with(s_kill, subject.app_process.pid).and_call_original.twice
     subject.signal("QUIT")

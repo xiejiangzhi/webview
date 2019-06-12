@@ -50,7 +50,7 @@ module Webview
       begin
         Timeout.timeout(3) do
           Process.wait(pid)
-        rescue Errno::ECHILD, Errno::ESRCH
+        rescue Errno::ECHILD, Errno::ESRCH, Errno::EINVAL
         end
       rescue Timeout::Error
         kill
