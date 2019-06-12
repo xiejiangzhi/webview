@@ -5,8 +5,7 @@ module Webview
   class App
     attr_reader :app_out, :app_err, :app_process, :options
 
-    SIGNALS_MAPPING = case Gem::Platform.local.os
-    when 'mingw32'
+    SIGNALS_MAPPING = if Gem.win_platform?
       {
         'QUIT' => 'EXIT',
       }
