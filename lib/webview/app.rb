@@ -5,6 +5,15 @@ module Webview
   class App
     attr_reader :app_out, :app_err, :app_process, :options
 
+    SIGNALS_MAPPING = case Gem::Platform.local.os
+    when 'mingw32'
+      {
+        'QUIT' => 'EXIT',
+      }
+    else
+      {} # don't map
+    end
+
     def initialize(title: nil, width: nil, height: nil, resizable: nil, debug: false)
       @options = {
         title: title,
@@ -21,11 +30,11 @@ module Webview
 
     def open(url)
       return true if @app_process
-      cmd = [executable, "-url '#{url}'"]
+      cmd = [executable, "-url \"#{url}\""]
       @options.each do |k, v|
         case v
         when true, false then cmd << "-#{k}" if v
-        else cmd << "-#{k} '#{v}'"
+        else cmd << "-#{k} \"#{v}\""
         end
       end
       exec_cmd(cmd.join(' '))
@@ -57,12 +66,13 @@ module Webview
     end
 
     def kill
-      signal('TERM')
+      signal('KILL')
     end
 
     def signal(name)
       return false unless app_process&.pid
-      Process.kill(name, app_process.pid)
+      s = SIGNALS_MAPPING[name] || name
+      Process.kill(Signal.list[s], app_process.pid)
       true
     rescue Errno::ECHILD, Errno::ESRCH
       false
