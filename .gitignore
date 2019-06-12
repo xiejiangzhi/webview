@@ -11,7 +11,8 @@
 .rspec_status
 
 /ext/ext_package
-/ext/webview_app
+/ext/webview_app*
+/ext/webview/webview*
 mkmf.log
 /webview-*.gem
 /spec/examples.txt
