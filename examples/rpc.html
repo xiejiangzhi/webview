@@ -1,0 +1,41 @@
+<html>
+  <head>
+  </head>
+
+  <body>
+    <button data-rpc='openfile'>OpenFile</button>
+    <button data-rpc='opendir'>OpenDir</button>
+    <button data-rpc='fullscreen'>Fullscreen</button>
+    <button data-rpc='unfullscreen'>Unfullscreen</button>
+    <button data-rpc='savefile'>SaveFile</button>
+    <button data-rpc='close'>Close</button>
+
+    <br />
+    <br />
+    <hr />
+
+    <strong>Output: </strong>
+    <div id='output'></div>
+
+    <script type='text/javascript'>
+      var output = document.querySelector('#output')
+
+      window.rpc_cb = function(type, value, userdata) {
+        output.innerHTML = output.innerHTML + "<br />" + 
+          'RPC callback "' + type + '", "' + value + '", "' + userdata + '"';
+      }
+
+      var elems = document.querySelectorAll('button[data-rpc]');
+      for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+        elem.onclick = function(e) {
+          var action = e.target.dataset.rpc;
+          var userdata = new Date().getTime().toString();
+          var data = action + ',' + userdata
+          output.innerHTML = output.innerHTML + "<br /> invoke data: \"" + data + '"';
+          window.external.invoke(data);
+        }
+      }
+    </script>
+  </body>
+</html>

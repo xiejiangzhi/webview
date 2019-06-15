@@ -7,10 +7,17 @@ import "flag"
 import "fmt"
 import "os"
 import "strings"
+import "runtime"
 
 func EvalCallback(w webview.WebView, name string, value string, userdata string) {
   value = strings.Replace(value, "'", "\\'", -1)
   userdata = strings.Replace(userdata, "'", "\\'", -1)
+
+  // for windows path
+  if runtime.GOOS == "windows" {
+    value = strings.Replace(value, "\\", "\\\\", -1)
+    userdata = strings.Replace(userdata, "\\", "\\\\", -1)
+  }
 
 	w.Eval(fmt.Sprintf(`
     (function(){
